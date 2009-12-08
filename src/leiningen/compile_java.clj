@@ -1,7 +1,8 @@
 ;;; javac plugin
 
 
-(ns leiningen.javac
+(ns leiningen.compile-java
+  (:require [other-lancet])
   (:use [leiningen.compile])
   (:refer-clojure :exclude [compile]))
 

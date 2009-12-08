@@ -11,7 +11,10 @@ $lein compile-java
 
 ## Installation
 
-It is located as a library at clojars.org.
+It is located as a library at clojars.org, you can add it to your leiningen project:
+
+:dev-dependencies [[lein-javac "0.0.1-SNAPSHOT"]]
+:repositories [["clojars" "http://clojars.org/repo"]]
 
 ## License
 
