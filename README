@@ -1,0 +1,18 @@
+# lein-javac
+
+A javac plugin for Leiningen.
+
+It allows you to compile .java files in the src directory of the project.
+The compiled classes will be outputed to the classes directory of the project.
+
+## Usage
+
+$lein compile-java
+
+## Installation
+
+It is located as a library at clojars.org.
+
+## License
+
+MIT license
