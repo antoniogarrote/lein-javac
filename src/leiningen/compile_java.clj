@@ -15,12 +15,15 @@
          (find-lib-jars project)))
 
 (defn compile-java [project]
-  (let [project-root (:source-path project)]
-    (other-lancet/javac {:srcdir (str project-root "/src")
+  (let [project-root (:root project)]
+    (other-lancet/javac {:srcdir (or (:java-source-path project)
+                                     (:source-path project))
                          :destdir (str project-root "/classes")
                          :includejavaruntime "yes"
                          :classpath (lib-path project)
-                         :debug (or (str (:javac-debug project))
+                         :debug (or (:javac-debug project)
                                     "false")
-                         :target (or (str (:javac-target project))
-                                     "1.5")})))
+                         :target (or (:javac-target project)
+                                     "1.5")
+                         :fork (or (:javac-fork project)
+                                   "true")})))

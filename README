@@ -9,6 +9,19 @@ The compiled classes will be outputed to the classes directory of the project.
 
 $lein compile-java
 
+You can specify some options in your leiningen project to customize
+the way javac works, as in the following sample:
+
+(defproject testjc "1.0"
+   :description "testjc"
+   :main testjc.testjc
+   :source-path "src/clj"
+   :java-source-path "src/java"
+   :javac-fork "true"
+   :dependencies [[org.clojure/clojure-lang "1.1.0-alpha-SNAPSHOT"]
+                  [org.clojure/clojure-contrib "1.0-SNAPSHOT"]])
+
+
 ## Installation
 
 It is located as a library at clojars.org, you can add it to your leiningen project:
