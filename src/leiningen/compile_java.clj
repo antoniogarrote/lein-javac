@@ -1,8 +1,14 @@
 ;;; javac plugin
 
+(ns lancet
+  (:require [lancet]))
+
+(defmethod coerce [org.apache.tools.ant.types.Path String] [_ str]
+  (new org.apache.tools.ant.types.Path ant-project str))
+
 
 (ns leiningen.compile-java
-  (:require [other-lancet])
+  (:require [lancet])
   (:use [leiningen.compile])
   (:refer-clojure :exclude [compile]))
 
@@ -16,7 +22,7 @@
 
 (defn compile-java [project]
   (let [project-root (:root project)]
-    (other-lancet/javac {:srcdir (or (:java-source-path project)
+    (lancet/javac {:srcdir (or (:java-source-path project)
                                      (:source-path project))
                          :destdir (str project-root "/classes")
                          :includejavaruntime "yes"
