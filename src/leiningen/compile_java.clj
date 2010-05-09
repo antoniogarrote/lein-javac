@@ -24,7 +24,8 @@
   (let [project-root (:root project)]
     (lancet/javac {:srcdir (or (:java-source-path project)
                                      (:source-path project))
-                         :destdir (str project-root "/classes")
+                         :destdir (or (:compile-path project)
+				      (str project-root "/classes"))
                          :includejavaruntime "yes"
                          :classpath (lib-path project)
                          :debug (or (:javac-debug project)
