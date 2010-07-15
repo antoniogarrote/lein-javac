@@ -1,12 +1,8 @@
 ;;; Variation of Lancet allowing to pass the
 ;;; the project as a parameter to the coerce multimethod
 
-
 (ns other-lancet
   (:gen-class)
-  (:use [clojure.contrib.except :only (throw-if)]
-        clojure.contrib.shell-out
-        [clojure.contrib.str-utils :only (re-split)])
   (:import (java.beans Introspector) (java.util.concurrent CountDownLatch)))
 
 (defmulti coerce (fn [dest-class src-inst prj] [dest-class (class src-inst)]))
@@ -23,10 +19,7 @@
   (System/getenv (name val)))
 
 (defn- build-sh-args [args]
-  (concat (re-split #"\s+" (first args)) (rest args)))
-
-(defn system [& args]
-  (println (apply sh (build-sh-args args))))
+  (concat (.split (first args) " +") (rest args)))
 
 (def
  #^{:doc "Dummy ant project to keep Ant tasks happy"}
@@ -35,6 +28,7 @@
        logger (org.apache.tools.ant.NoBannerLogger.)]
    (doto logger
      (.setMessageOutputLevel org.apache.tools.ant.Project/MSG_INFO)
+     (.setEmacsMode true)
      (.setOutputPrintStream System/out)
      (.setErrorPrintStream System/err))
    (doto proj
@@ -52,19 +46,21 @@
 
 (defn set-property! [inst prop value]
   (let [pd (property-descriptor inst prop)]
-    (throw-if (nil? pd) (str "No such property " prop))
+    (when-not pd
+      (throw (Exception. (format "No such property %s." prop))))
     (let [write-method (.getWriteMethod pd)
           dest-class (get-property-class write-method)]
-;;       (do
-;;         (println (str "ABOUT TO COERCE " dest-class " into " value " for project " (. inst getProject)))
-        (.invoke write-method inst (into-array [(coerce dest-class value (. inst getProject))])))))
+      ;; (do
+      ;; (println (str "ABOUT TO COERCE " dest-class " into " value " for project " (. inst getProject)))
+      (.invoke write-method inst (into-array [(coerce dest-class value (. inst getProject))])))))
 
 (defn set-properties! [inst prop-map]
   (doseq [[k v] prop-map] (set-property! inst (name k) v)))
 
 (defn instantiate-task [project name props & filesets]
   (let [task (.createTask project name)]
-    (throw-if (nil? task) (str "No task named " name))
+    (when-not task
+      (throw (Exception. (format "No task named %s." name))))
     (doto task
       (.init)
       (.setProject project)
@@ -75,10 +71,10 @@
 
 (defn runonce
   "Create a function that will only run once. All other invocations
-  return the first calculated value. The function *can* have side effects
-  and calls to runonce *can* be composed. Deadlock is possible
-  if you have circular dependencies.
-  Returns a [has-run-predicate, reset-fn, once-fn]"
+return the first calculated value. The function *can* have side effects
+and calls to runonce *can* be composed. Deadlock is possible
+if you have circular dependencies.
+Returns a [has-run-predicate, reset-fn, once-fn]"
   [function]
   (let [sentinel (Object.)
         result (atom sentinel)

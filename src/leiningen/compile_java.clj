@@ -2,8 +2,10 @@
 
 
 (ns leiningen.compile-java
+  "Compile the java source files included in the project"
+  (:use [leiningen compile]
+        [leiningen classpath])
   (:require [other-lancet])
-  (:use [leiningen.compile])
   (:refer-clojure :exclude [compile]))
 
 (defn lib-path [project]
