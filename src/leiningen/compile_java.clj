@@ -48,10 +48,10 @@
 			 (:compile-path project)
 			 (str (:root project) "/classes"))))
 
-(defn compile-testsuite [project name]
+(defn compile-testsuite [project category]
   (let [tests (:java-tests project)
-	testsuite (get tests name)]
+	testsuite (get tests category)]
     (compile-directory project
 		       (:source-path testsuite)
 		       (:compile-path testsuite)
-		       (test-path testsuite project))))
+		       (test-path project testsuite))))
