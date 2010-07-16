@@ -1,3 +1,9 @@
+= master
+
+Honor project's :compile-path option
+Add suppport for compiling tests (unit and integration tests)
+Remove patched lancet
+
 = version 0.0.2
 
 Patches and extra options submitted by <rw@smsnet.pl>
