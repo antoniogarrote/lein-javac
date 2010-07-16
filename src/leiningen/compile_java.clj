@@ -36,6 +36,7 @@
 
 (defn compile-directory
   ([project srcdir destdir classpath]
+     (lancet/mkdir {:dir destdir})
      (lancet/javac (merge (javac-defaults project)
 			  {:srcdir srcdir :destdir destdir :classpath classpath})))
   ([project srcdir destdir]
