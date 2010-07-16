@@ -16,12 +16,13 @@
          (:resources-path project)
          (find-lib-jars project)))
 
-(defn test-path [testsuite project]
+(defn test-path [project testsuite]
   (apply make-path
 	 (:source-path testsuite)
 	 (:fixture-path testsuite)
          (:compile-path project)
          (:resources-path project)
+	 (:compile-path project)
          (find-lib-jars project)))
 
 (defn javac-defaults [project]
