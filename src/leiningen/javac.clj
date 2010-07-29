@@ -35,10 +35,10 @@ Usage:
   [project [path & options]]
   (let [srcdir (expand-path project path)]
     (-> (java-options project)
-        (merge (apply hash-map options))
         (merge {:classpath (apply make-path (conj (get-classpath project) srcdir))
                 :destdir (:compile-path project)
-                :srcdir srcdir}))))
+                :srcdir srcdir})
+        (merge (apply hash-map options)))))
 
 (defn- extract-compile-tasks
   "Extract all compile tasks of the project."
