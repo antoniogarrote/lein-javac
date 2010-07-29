@@ -18,7 +18,7 @@ Usage:
   "The default options for the java compiler.")
 
 (defmethod lancet/coerce [Path String] [_ str]
-           (Path. lancet/ant-project str))
+  (Path. lancet/ant-project str))
 
 (defn- expand-path [project path]
   (if-not (= (first path) \/)
