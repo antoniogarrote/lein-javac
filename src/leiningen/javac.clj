@@ -1,11 +1,10 @@
 (ns leiningen.javac
-  "Compile java sources with Leiningen.
+  "Compile java source files with Leiningen.
 
 Usage:
 
-  lein javac      - Compile all java source directories specified in project.clj.
-  lein javac PATH - Compile only the java source directories specified in project.clj.
-
+  lein javac      - Compile all java sources.
+  lein javac PATH - Compile only java sources in PATH.
 "
   (:import org.apache.tools.ant.types.Path java.io.File)
   (:use [clojure.contrib.def :only (defvar)]
@@ -57,66 +56,3 @@ Usage:
   (doseq [task (extract-compile-tasks project)
           :when (or (nil? directory) (= (expand-path project directory) (:srcdir task)))]    
     (run-compile-task task)))
-
-;; (defn compile-directory
-;;   "Compile all Java files in the source directory and write the class
-;;   files to the target directory."
-;;   [source-directory target-directory & java-options]
-;;   (let [java-options (apply hash-map java-options)]
-;;     (lancet/mkdir {:dir target-directory})
-;;     (lancet/javac (merge java-options {:srcdir source-directory :destdir target-directory}))))
-
-;; (defn lib-path [project]
-;;   (apply make-path
-;;          (:source-path project)
-;;          (:test-path project)
-;;          (:compile-path project)
-;;          (:resources-path project)
-;;          (find-lib-jars project)))
-
-;; (defn test-path [project testsuite]
-;;   (apply make-path
-;;          (:source-path testsuite)
-;;          (:fixture-path testsuite)
-;;          (:compile-path project)
-;;          (:resources-path project)
-;;          (:compile-path project)
-;;          (find-lib-jars project)))
-
-;; (defn lib-path [project]
-;;   (apply make-path
-;;          (:source-path project)
-;;          (:test-path project)
-;;          (:compile-path project)
-;;          (:resources-path project)
-;;          (find-lib-jars project)))
-
-;; ;; (defn compile-java [project]
-;; ;;   (let [project-root (:root project)]
-;; ;;     (lancet/javac {:srcdir (or (:java-source-path project)
-;; ;;                                (:source-path project))
-;; ;;                    :destdir (str project-root "/classes")
-;; ;;                    :includejavaruntime "yes"
-;; ;;                    :classpath (lib-path project)
-;; ;;                    :debug (or (:javac-debug project)
-;; ;;                               "false")
-;; ;;                    :target (or (:javac-target project)
-;; ;;                                "1.5")
-;; ;;                    :fork (or (:javac-fork project)
-;; ;;                              "true")})))
-
-;; ;; (defn javac [project & [task-name]]  
-;; ;;   (doseq [compile-task (extract-compile-jobs project)]
-;; ;;     (if (or (nil? task-name) (= task-name (:name compile-task)))
-;; ;;       (apply compile-directory
-;; ;;              (:srcdir compile-task)
-;; ;;              (:compile-path project)
-;; ;;              ;; (flatten (seq (java-options project (:java-options compile-task))))
-;; ;;              ))))
-
-
-;; ;; (defn javac [project & [task-name]]  
-;; ;;   (for [compile-task (extract-compile-jobs project)]
-;; ;;     (if (or (nil? task-name) (= task-name (:name compile-task)))      
-;; ;;       (flatten (seq (assoc (merge (java-options project) (:java-options compile-task))
-;; ;;                       :classpath (conj (get-classpath project) (:srcdir compile-task))))))))

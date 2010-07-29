@@ -38,7 +38,7 @@
 (deftest test-extract-compile-tasks
   (is (= (map classpath->str (extract-compile-tasks *project*))
          [(classpath->str (extract-compile-task *project* ["src/java"]))
-          (classpath->str (extract-compile-task *project* ["test/java-unit" :debug "true"]))])))
+          (classpath->str (extract-compile-task *project* ["test/java" :debug "true"]))])))
 
 (deftest test-java-options
   (is (= (java-options {}) *java-options*))
