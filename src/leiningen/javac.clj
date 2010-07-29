@@ -19,8 +19,12 @@ Usage:
 (defmethod lancet/coerce [Path String] [_ str]
   (Path. lancet/ant-project str))
 
-(defn- expand-path [project path]
-  (if-not (= (first path) \/)
+(defn- expand-path
+  "Expand a path fragment relative to the project root. If path starts
+  with File/separator it is treated as an absolute path and will not
+  be modified."
+  [project path]
+  (if-not (= (str (first path)) File/separator)
     (str (:root project) File/separator path)
     path))
 
