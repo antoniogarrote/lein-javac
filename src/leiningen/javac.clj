@@ -46,7 +46,7 @@ Usage:
     (map #(extract-compile-task project %)
          (if (isa? (class specs) String) [[specs]] specs))))
 
-(defn run-compile-task
+(defn- run-compile-task
   "Compile the given task spec."
   [task-spec]  
   (lancet/mkdir {:dir (:destdir task-spec)})
