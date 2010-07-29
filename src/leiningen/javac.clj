@@ -8,8 +8,7 @@ Usage:
 "
   (:import org.apache.tools.ant.types.Path java.io.File)
   (:use [clojure.contrib.def :only (defvar)]
-        [leiningen compile]
-        [leiningen classpath])
+        [leiningen.classpath :only (get-classpath make-path)])
   (:require lancet)
   (:refer-clojure :exclude [compile]))
 
