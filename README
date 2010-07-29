@@ -1,34 +1,46 @@
 # lein-javac
 
-A javac plugin for Leiningen.
+A Leiningen plugin to compile java sources.
 
-It allows you to compile .java files in the src directory of the project.
-The compiled classes will be outputed to the classes directory of the project.
+Forked from the original at http://github.com/antoniogarrote/lein-javac
 
-## Usage
+The plugin allows you to compile Java files from one or more
+directoories in of your project. The compiled class files will be
+written to the "classes" directory of your project.
 
-$lein compile-java
+## Configuration
 
-You can specify some options in your leiningen project to customize
-the way javac works, as in the following sample:
+The directories containing java source files can be specified by the
+"java-source-path" option in the project.clj file. Compiler options
+for all java source directories can be specified with the
+"java-options" option. Compiler options specific to a certain
+directory can be provided after the source directory.
 
-(defproject testjc "1.0"
-   :description "testjc"
-   :main testjc.testjc
-   :source-path "src/clj"
-   :java-source-path "src/java"
-   :javac-fork "true"
-   :dependencies [[org.clojure/clojure-lang "1.1.0-alpha-SNAPSHOT"]
-                  [org.clojure/clojure-contrib "1.0-SNAPSHOT"]])
+Example:
 
+  (defproject sample-project "0.0.1-SNAPSHOT"
+    :dependencies [[org.clojure/clojure "1.2.0-beta1"]]
+    :dev-dependencies [[lein-javac "1.2.1-SNAPSHOT"]]
+    :source-path "src/clojure"
+    :java-source-path [["src/java"]
+                       ["test/java" :debug "true"]]
+    :java-options {:debug "true"})
+
+## Compilation
+
+Compiling all java source directories.
+
+  $ lein javac
+
+Compiling a specific java source directories.
+
+  $ lein javac src/java
 
 ## Installation
 
-It is located as a library at clojars.org, you can add it to your leiningen project:
-
-:dev-dependencies [[lein-javac "0.0.1-SNAPSHOT"]]
-:repositories [["clojars" "http://clojars.org/repo"]]
+Do it yourself, until merged with the original :(
 
 ## License
 
 MIT license
+
