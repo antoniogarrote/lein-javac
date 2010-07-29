@@ -1,6 +1,7 @@
-(defproject lein-javac "0.0.3-SNAPSHOT"
-  :description "javac plugin for leiningen"
-  :dependencies [[org.clojure/clojure "1.1.0"]
-		 [org.clojure/clojure-contrib "1.1.0"]
-		 [leiningen "1.2.0"]]
-  :dev-dependencies [[swank-clojure "1.2.1"]])
+(defproject lein-javac "1.2.1-SNAPSHOT"
+  :description "Java compiler plugin for Leiningen."
+  :dev-dependencies [[leiningen/leiningen "1.2.1-SNAPSHOT"]
+                     [ant/ant-launcher "1.6.5"]
+                     [org.clojure/clojure "1.2.0-beta1"]
+                     [org.clojure/clojure-contrib "1.2.0-beta1"]
+                     [swank-clojure "1.2.1"]])
