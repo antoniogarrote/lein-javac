@@ -59,3 +59,4 @@ Usage:
   (doseq [task (extract-compile-tasks project)
           :when (or (nil? directory) (= (expand-path project directory) (:srcdir task)))]    
     (run-compile-task task)))
+
