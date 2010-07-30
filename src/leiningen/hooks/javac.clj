@@ -1,6 +1,5 @@
 (ns leiningen.hooks.javac
-  (:require leiningen.compile
-            leiningen.jar)
+  (:require leiningen.compile)
   (:use [leiningen.javac :only (javac)]
         robert.hooke))
 
