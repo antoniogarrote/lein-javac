@@ -4,7 +4,7 @@
 ;; "lein new".
 
 (defproject sample-project "0.0.1-SNAPSHOT"
-  :dependencies [[org.clojure/clojure "1.2.0-beta1"]]
+  :dependencies [[org.clojure/clojure "1.2.0-RC1"]]
   :dev-dependencies [[lein-javac "1.2.1-SNAPSHOT"]]
   :source-path "src/clojure"
   :java-source-path [["src/java"]
