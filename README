@@ -2,8 +2,6 @@
 
 A Leiningen plugin to compile java sources.
 
-Forked from the original at http://github.com/antoniogarrote/lein-javac
-
 The plugin allows you to compile Java files from one or more
 directoories in of your project. The compiled class files will be
 written to the "classes" directory of your project.
@@ -39,6 +37,12 @@ Compiling a specific java source directories.
 ## Installation
 
 Do it yourself, until merged with the original :(
+
+## Authors
+
+- Caspar Florian Ebeling / febeling
+- Antonio Garrote / antoniogarrote
+- Roman Scherer / r0man
 
 ## License
 
