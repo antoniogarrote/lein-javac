@@ -3,8 +3,8 @@
 A Leiningen plugin to compile java sources.
 
 The plugin allows you to compile Java files from one or more
-directoories in of your project. The compiled class files will be
-written to the "classes" directory of your project.
+directories of your project. The compiled class files will be written
+to the "classes" directory of your project.
 
 ## Configuration
 
