@@ -36,7 +36,9 @@ Compiling a specific java source directories.
 
 ## Installation
 
-Do it yourself, until merged with the original :(
+Use Leiningen and add lein-javac to your development dependencies.
+
+  :dev-dependencies [[lein-javac "1.2.1-SNAPSHOT"]]
 
 ## Authors
 
