@@ -19,7 +19,7 @@ Usage:
 (defmethod lancet/coerce [Path String] [_ str]
   (Path. lancet/ant-project str))
 
-(defn- expand-path
+(defn expand-path
   "Expand a path fragment relative to the project root. If path starts
   with File/separator it is treated as an absolute path and will not
   be modified."
@@ -32,7 +32,7 @@ Usage:
   "Returns the java compiler options of the project."
   [project] (merge *java-options* (:java-options project)))
 
-(defn- extract-compile-task
+(defn extract-javac-task
   "Extract a compile task from the given spec."
   [project [path & options]]
   (let [srcdir (expand-path project path)]
@@ -42,21 +42,21 @@ Usage:
                 :srcdir srcdir})
         (merge (apply hash-map options)))))
 
-(defn- extract-compile-tasks
+(defn extract-javac-tasks
   "Extract all compile tasks of the project."
   [project]
   (let [specs (:java-source-path project)]
-    (map #(extract-compile-task project %)
+    (map #(extract-javac-task project %)
          (if (isa? (class specs) String) [[specs]] specs))))
 
-(defn- run-compile-task
+(defn- run-javac-task
   "Compile the given task spec."
   [task-spec]  
   (lancet/mkdir {:dir (:destdir task-spec)})
   (lancet/javac task-spec))
 
 (defn javac [project & [directory]]  
-  (doseq [task (extract-compile-tasks project)
+  (doseq [task (extract-javac-tasks project)
           :when (or (nil? directory) (= (expand-path project directory) (:srcdir task)))]    
-    (run-compile-task task)))
+    (run-javac-task task)))
 
