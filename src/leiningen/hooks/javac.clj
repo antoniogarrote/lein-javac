@@ -6,8 +6,9 @@
 
 (defn clean-javac-hook [task & args]
   (apply task args)
-  (let [tasks (extract-javac-tasks (first args))]
-    (delete-file-recursively (:destdir task))))
+  (doseq [task (extract-javac-tasks (first args))]
+    (if-let [directory (:destdir task)]
+      (delete-file-recursively directory true))))
 
 (defn compile-javac-hook [task & args]
   (apply javac args)
