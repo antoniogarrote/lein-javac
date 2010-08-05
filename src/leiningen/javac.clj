@@ -8,6 +8,7 @@ Usage:
 "
   (:import org.apache.tools.ant.types.Path java.io.File)
   (:use [clojure.contrib.def :only (defvar)]
+        [clojure.contrib.string :only (split join)]
         [leiningen.classpath :only (get-classpath make-path)])
   (:require lancet)
   (:refer-clojure :exclude [compile]))
@@ -28,6 +29,10 @@ Usage:
     (str (:root project) File/separator path)
     path))
 
+(defn classpath [project]
+  (let [compile-path (expand-path project (:compile-path project))]
+    (join File/pathSeparator (map str (conj (get-classpath project) compile-path)))))
+
 (defn- java-options
   "Returns the java compiler options of the project."
   [project] (merge *java-options* (:java-options project)))
@@ -35,13 +40,11 @@ Usage:
 (defn extract-javac-task
   "Extract a compile task from the given spec."
   [project [path & options]]
-  (let [srcdir (expand-path project path)
-        javac-task (-> (java-options project)
-                       (merge {:classpath (str (apply make-path (conj (map str (get-classpath project)) srcdir)))
-                               :destdir (:compile-path project)
-                               :srcdir srcdir})
+  (let [javac-task (-> (java-options project)
+                       (merge {:destdir (:compile-path project) :srcdir path})
                        (merge (apply hash-map options)))]
     (assoc javac-task
+      :classpath (classpath project)
       :srcdir (expand-path project (:srcdir javac-task))
       :destdir (expand-path project (:destdir javac-task)))))
 

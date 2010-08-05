@@ -2,7 +2,7 @@
   (:import java.io.File)
   (:require leiningen.hooks.javac)
   (:use [leiningen.core :only (defproject read-project)]
-        [leiningen.classpath :only (get-classpath make-path)]
+        [leiningen.classpath :only (get-classpath make-path)] 
         [leiningen.clean :only (clean)]
         [clojure.contrib.def :only (defvar)]
         clojure.test
@@ -40,19 +40,18 @@
   (is (= (expand-path *project* "src")
          (str (:root *project*) File/separator "src"))))
 
-(deftest test-extract-javac-task  
-  (let [classpath (get-classpath *project*)]
-    (are [specs expected]
-      (is (= (extract-javac-task *project* specs) (merge (java-options *project*) expected)))
-      ["src/java"]
-      {:classpath (str (apply make-path (conj classpath (expand-path *project* "src/java"))))
-       :destdir (expand-path *project* (:compile-path *project*))
-       :srcdir (expand-path *project* "src/java")}
-      ["src/java" :debug "true"]
-      {:classpath (str (apply make-path (conj classpath (expand-path *project* "src/java"))))
-       :destdir (expand-path *project* (:compile-path *project*))
-       :debug "true"
-       :srcdir (expand-path *project* "src/java")})))
+(deftest test-extract-javac-task    
+  (are [specs expected]
+    (is (= (extract-javac-task *project* specs) (merge (java-options *project*) expected)))
+    ["src/java"]
+    {:classpath (classpath *project*)
+     :destdir (expand-path *project* (:compile-path *project*))
+     :srcdir (expand-path *project* "src/java")}
+    ["src/java" :debug "true"]
+    {:classpath (classpath *project*)
+     :destdir (expand-path *project* (:compile-path *project*))
+     :debug "true"
+     :srcdir (expand-path *project* "src/java")}))
 
 (deftest test-extract-javac-tasks
   (is (= (extract-javac-tasks *project*) [(java-src-task) (java-test-task)])))
