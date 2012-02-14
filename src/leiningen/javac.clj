@@ -7,18 +7,16 @@ Usage:
   lein javac PATH - Compile only java sources in PATH.
 "
   (:import org.apache.tools.ant.types.Path java.io.File)
-  (:use [clojure.contrib.def :only (defvar)]
-        [clojure.contrib.string :only (split join)]
-        [leiningen.classpath :only (get-classpath make-path)])
+  (:use [clojure.string :only (join)]
+        [leiningen.classpath :only (get-classpath)])
   (:require lancet)
   (:refer-clojure :exclude [compile]))
 
-(defvar *java-options*
-  {:debug "false" :fork "true" :includejavaruntime "yes" :target "1.5"}
-  "The default options for the java compiler.")
+(def ^{:dynamic true} *java-options*
+  {:debug "false" :fork "true" :includejavaruntime "yes"})
 
 (defmethod lancet/coerce [Path String] [_ str]
-           (Path. lancet/ant-project str))
+  (Path. lancet/ant-project str))
 
 (defn expand-path
   "Expand a path fragment relative to the project root. If path starts
@@ -61,8 +59,7 @@ Usage:
   (lancet/mkdir {:dir (:destdir task-spec)})
   (lancet/javac task-spec))
 
-(defn javac [project & [directory]]  
+(defn javac [project & [directory]]
   (doseq [task (extract-javac-tasks project)
-          :when (or (nil? directory) (= (expand-path project directory) (:srcdir task)))]    
+          :when (or (nil? directory) (= (expand-path project directory) (:srcdir task)))]
     (run-javac-task task)))
-

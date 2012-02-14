@@ -2,63 +2,61 @@
   (:import java.io.File)
   (:require leiningen.hooks.javac)
   (:use [leiningen.core :only (defproject read-project)]
-        [leiningen.classpath :only (get-classpath make-path)] 
+        [leiningen.classpath :only (get-classpath)]
         [leiningen.clean :only (clean)]
-        [clojure.contrib.def :only (defvar)]
         clojure.test
         leiningen.javac
         leiningen.test.helper))
 
 (refer-private 'leiningen.javac)
 
-(defvar *project* (read-project "sample/project.clj")
-  "The sample project file.")
+(def project (read-project "sample/project.clj"))
 
 (defn- java-src-task []
-  (extract-javac-task *project* (first (:java-source-path *project*))))
+  (extract-javac-task project (first (:java-source-path project))))
 
 (defn- java-test-task []
-  (extract-javac-task *project* (second (:java-source-path *project*))))
+  (extract-javac-task project (second (:java-source-path project))))
 
 (defn- main-class-file []
-  (File. (str (expand-path *project* (:destdir (java-src-task)))
+  (File. (str (expand-path project (:destdir (java-src-task)))
               File/separator "Main.class")))
 
 (defn- test-class-file []
-  (File. (str (expand-path *project* (:destdir (java-test-task)))
+  (File. (str (expand-path project (:destdir (java-test-task)))
               File/separator "MainTest.class")))
 
 (defn- compile-directory []
-  (File. (expand-path *project* (:compile-path *project*))))
+  (File. (expand-path project (:compile-path project))))
 
 (defn- cleanup-classes []
   (map #(.delete %) [(main-class-file) (test-class-file)]))
 
-(deftest test-expand-path  
-  (is (= (expand-path *project* "/tmp")
+(deftest test-expand-path
+  (is (= (expand-path project "/tmp")
          "/tmp"))
-  (is (= (expand-path *project* "src")
-         (str (:root *project*) File/separator "src"))))
+  (is (= (expand-path project "src")
+         (str (:root project) File/separator "src"))))
 
-(deftest test-extract-javac-task    
+(deftest test-extract-javac-task
   (are [specs expected]
-    (is (= (extract-javac-task *project* specs) (merge (java-options *project*) expected)))
+    (is (= (extract-javac-task project specs) (merge (java-options project) expected)))
     ["src/java"]
-    {:classpath (classpath *project*)
-     :destdir (expand-path *project* (:compile-path *project*))
-     :srcdir (expand-path *project* "src/java")}
+    {:classpath (classpath project)
+     :destdir (expand-path project (:compile-path project))
+     :srcdir (expand-path project "src/java")}
     ["src/java" :debug "true"]
-    {:classpath (classpath *project*)
-     :destdir (expand-path *project* (:compile-path *project*))
+    {:classpath (classpath project)
+     :destdir (expand-path project (:compile-path project))
      :debug "true"
-     :srcdir (expand-path *project* "src/java")}))
+     :srcdir (expand-path project "src/java")}))
 
 (deftest test-extract-javac-tasks
-  (is (= (extract-javac-tasks *project*) [(java-src-task) (java-test-task)])))
+  (is (= (extract-javac-tasks project) [(java-src-task) (java-test-task)])))
 
 (deftest test-java-options
   (is (= (java-options {}) *java-options*))
-  (is (= (java-options *project*) (assoc *java-options* :debug "true"))))
+  (is (= (java-options project) (assoc *java-options* :debug "true"))))
 
 (deftest test-run-javac-task
   (let [task-spec (java-src-task)]
@@ -72,7 +70,7 @@
 (deftest test-javac
   (try
     (cleanup-classes)
-    (javac *project*)
+    (javac project)
     (is (.exists (compile-directory)))
     (is (.exists (main-class-file)))
     (is (.exists (test-class-file)))
@@ -80,10 +78,10 @@
 
 (deftest test-clean-hook
   (try
-    (javac *project*)
+    (javac project)
     (is (.exists (main-class-file)))
     (is (.exists (test-class-file)))
-    (clean *project*)
+    (clean project)
     (is (not (.exists (main-class-file))))
     (is (not (.exists (test-class-file))))
     (finally (cleanup-classes))))

@@ -1,6 +1,6 @@
 (ns leiningen.hooks.javac
   (:require leiningen.clean leiningen.compile)
-  (:use [clojure.contrib.io :only [file delete-file delete-file-recursively]]
+  (:use [clojure.java.io :only [file delete-file]]
         [leiningen.javac :only (javac extract-javac-tasks)]
         robert.hooke))
 
@@ -8,7 +8,8 @@
   (apply task args)
   (doseq [task (extract-javac-tasks (first args))]
     (if-let [directory (:destdir task)]
-      (delete-file-recursively directory true))))
+      (doseq [file (file-seq (java.io.File. directory))]
+        (delete-file file true)))))
 
 (defn compile-javac-hook [task & args]
   (apply javac args)
