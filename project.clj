@@ -1,4 +1,4 @@
-(defproject lein-javac "1.2.2-SNAPSHOT"
+(defproject org.clojars.r0man/lein-javac "1.2.2-SNAPSHOT"
   :description "Java compiler plugin for Leiningen."
   :dependencies [[ant/ant-launcher "1.6.5"]]
   :dev-dependencies [[leiningen/leiningen "1.6.2-SNAPSHOT"]
