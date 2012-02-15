@@ -9,14 +9,14 @@ Usage:
   (:import org.apache.tools.ant.types.Path java.io.File)
   (:use [clojure.string :only (join)]
         [leiningen.classpath :only (get-classpath)])
-  (:require lancet.core)
+  (:require lancet)
   (:refer-clojure :exclude [compile]))
 
 (def ^{:dynamic true} *java-options*
   {:debug "false" :fork "true" :includejavaruntime "yes"})
 
-(defmethod lancet.core/coerce [Path String] [_ str]
-  (Path. lancet.core/ant-project str))
+(defmethod lancet/coerce [Path String] [_ str]
+  (Path. lancet/ant-project str))
 
 (defn expand-path
   "Expand a path fragment relative to the project root. If path starts
@@ -56,8 +56,8 @@ Usage:
 (defn- run-javac-task
   "Compile the given task spec."
   [task-spec]
-  (lancet.core/mkdir {:dir (:destdir task-spec)})
-  (lancet.core/javac task-spec))
+  (lancet/mkdir {:dir (:destdir task-spec)})
+  (lancet/javac task-spec))
 
 (defn javac [project & [directory]]
   (doseq [task (extract-javac-tasks project)
