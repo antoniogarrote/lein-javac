@@ -13,10 +13,10 @@
 (def project (read-project "sample/project.clj"))
 
 (defn- java-src-task []
-  (extract-javac-task project (first (:java-source-path project))))
+  (extract-javac-task project (first (:javac-source-path project))))
 
 (defn- java-test-task []
-  (extract-javac-task project (second (:java-source-path project))))
+  (extract-javac-task project (second (:javac-source-path project))))
 
 (defn- main-class-file []
   (File. (str (expand-path project (:destdir (java-src-task)))

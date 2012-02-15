@@ -8,7 +8,8 @@
   :dev-dependencies [[lein-javac "1.2.1-SNAPSHOT"]]
   :source-path "src/clojure"
   :compile-path "build/classes"
+  :plugins [[lein-javac "0.1.0"]]
   :hooks [leiningen.hooks.javac]
-  :java-source-path [["src/java"]
-                     ["test/java" :destdir "build/unit/classes"]]
-  :java-options {:debug "true"})
+  :javac-source-path [["src/java"]
+                      ["test/java" :destdir "build/unit/classes"]]
+  :javac-options {:debug "true"})

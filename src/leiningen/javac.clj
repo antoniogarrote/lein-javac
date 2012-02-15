@@ -9,14 +9,14 @@ Usage:
   (:import org.apache.tools.ant.types.Path java.io.File)
   (:use [clojure.string :only (join)]
         [leiningen.classpath :only (get-classpath)])
-  (:require lancet)
+  (:require lancet.core)
   (:refer-clojure :exclude [compile]))
 
 (def ^{:dynamic true} *java-options*
   {:debug "false" :fork "true" :includejavaruntime "yes"})
 
-(defmethod lancet/coerce [Path String] [_ str]
-  (Path. lancet/ant-project str))
+(defmethod lancet.core/coerce [Path String] [_ str]
+  (Path. lancet.core/ant-project str))
 
 (defn expand-path
   "Expand a path fragment relative to the project root. If path starts
@@ -33,7 +33,7 @@ Usage:
 
 (defn- java-options
   "Returns the java compiler options of the project."
-  [project] (merge *java-options* (:java-options project)))
+  [project] (merge *java-options* (:javac-options project)))
 
 (defn extract-javac-task
   "Extract a compile task from the given spec."
@@ -49,15 +49,15 @@ Usage:
 (defn extract-javac-tasks
   "Extract all compile tasks of the project."
   [project]
-  (let [specs (:java-source-path project)]
+  (let [specs (:javac-source-path project)]
     (map #(extract-javac-task project %)
          (if (isa? (class specs) String) [[specs]] specs))))
 
 (defn- run-javac-task
   "Compile the given task spec."
   [task-spec]
-  (lancet/mkdir {:dir (:destdir task-spec)})
-  (lancet/javac task-spec))
+  (lancet.core/mkdir {:dir (:destdir task-spec)})
+  (lancet.core/javac task-spec))
 
 (defn javac [project & [directory]]
   (doseq [task (extract-javac-tasks project)

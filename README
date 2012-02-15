@@ -20,9 +20,9 @@ Example:
     :dependencies [[org.clojure/clojure "1.2.0-beta1"]]
     :dev-dependencies [[lein-javac "1.2.1-SNAPSHOT"]]
     :source-path "src/clojure"
-    :java-source-path [["src/java"]
-                       ["test/java" :debug "true"]]
-    :java-options {:debug "true"})
+    :javac-source-path [["src/java"]
+                        ["test/java" :debug "true"]]
+    :javac-options {:debug "true"})
 
 ## Compilation
 
@@ -40,6 +40,15 @@ Use Leiningen and add lein-javac to your development dependencies.
 
   :dev-dependencies [[lein-javac "1.2.1-SNAPSHOT"]]
 
+## Leiningen's built-in "javac" task
+
+Leiningen has a built in "javac" task, that was derived from
+lein-javac. Unfortunately most of the lein-javac features have been
+stripped out over the time :(
+
+Use the :javac-source-path and :javac-options keywords if you want to
+use lein-javac, otherwise just :java-source-path and :java-options.
+
 ## Authors
 
 - Caspar Florian Ebeling / febeling
@@ -49,4 +58,3 @@ Use Leiningen and add lein-javac to your development dependencies.
 ## License
 
 EPL license
-
